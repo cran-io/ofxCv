@@ -46,7 +46,7 @@ namespace ofxCv {
 			cv::Mat thresholdedMat = toCv(thresholded);
 			update(frameMat, thresholdedMat);
 		}
-		void update(cv::Mat frame, cv::Mat& thresholded);
+		void update(cv::Mat frame, cv::Mat thresholded);
 		cv::Mat& getBackground();
 		cv::Mat& getForeground();
 		float getPresence() const;

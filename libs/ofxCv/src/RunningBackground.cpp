@@ -11,7 +11,7 @@ namespace ofxCv {
 	,needToReset(false)
 	,differenceMode(ABSDIFF) {
 	}
-	void RunningBackground::update(cv::Mat frame, cv::Mat& thresholded) {
+	void RunningBackground::update(cv::Mat frame, cv::Mat thresholded) {
 		if(needToReset || accumulator.empty()) {
 			needToReset = false;
 			frame.convertTo(accumulator, CV_32F);
