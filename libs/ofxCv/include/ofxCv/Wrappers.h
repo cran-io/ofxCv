@@ -131,36 +131,36 @@ cv::name(xMat, yMat, resultMat);\
 	
 	// erode out of place
 	template <class S, class D>
-	void erode(S& src, D& dst, int iterations, int shape) {
+	void erode(S& src, D& dst, int iterations, int shape, int size) {
 		imitate(dst, src);
 		Mat srcMat = toCv(src), dstMat = toCv(dst);
 		
-		Mat kernel = cv::getStructuringElement(shape, cv::Size(3, 3));
+		Mat kernel = cv::getStructuringElement(shape, cv::Size(size, size));
 		
 		cv::erode(srcMat, dstMat, kernel, cv::Point(-1, -1), iterations);
 	}
 	
 	// erode in place
 	template <class SD>
-	void erode(SD& srcDst, int iterations, int shape) {
-		ofxCv::erode(srcDst, srcDst, iterations, shape);
+	void erode(SD& srcDst, int iterations, int shape, int size) {
+		ofxCv::erode(srcDst, srcDst, iterations, shape, size);
 	}
 	
 	// dilate out of place
 	template <class S, class D>
-	void dilate(S& src, D& dst, int iterations, int shape) {
+	void dilate(S& src, D& dst, int iterations, int shape, int size) {
 		imitate(dst, src);
 		Mat srcMat = toCv(src), dstMat = toCv(dst);
 		
-		Mat kernel = cv::getStructuringElement(shape, cv::Size(3, 3));
+		Mat kernel = cv::getStructuringElement(shape, cv::Size(size, size));
 		
 		cv::dilate(srcMat, dstMat, kernel, cv::Point(-1, -1), iterations);
 	}
 	
 	// dilate in place
 	template <class SD>
-	void dilate(SD& srcDst, int iterations, int shape) {
-		ofxCv::dilate(srcDst, srcDst, iterations, shape);
+	void dilate(SD& srcDst, int iterations, int shape, int size) {
+		ofxCv::dilate(srcDst, srcDst, iterations, shape, size);
 	}
     
     // MorphologyEX out of place
