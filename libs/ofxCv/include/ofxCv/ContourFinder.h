@@ -40,13 +40,15 @@ namespace ofxCv {
 		ContourFinder();
 		
 		template <class T> 
-		vector<ofxCvBlob> findContours(T& img) {
-            return findContours(toCv(img));
+		void findContours(T& img) {
+            findContours(toCv(img));
 		}
-		vector<ofxCvBlob> findContours(cv::Mat img);
+		void findContours(cv::Mat img);
 		const vector<vector<cv::Point> >& getContours() const;
 		const vector<ofPolyline>& getPolylines() const;
 		const vector<cv::Rect>& getBoundingRects() const;
+		
+		vector<ofxCvBlob> blobs;
 		
 		unsigned int size() const;
 		vector<cv::Point>& getContour(unsigned int i);
@@ -66,11 +68,7 @@ namespace ofxCv {
 		cv::RotatedRect getFitEllipse(unsigned int i) const;
 		vector<cv::Point> getFitQuad(unsigned int i) const;
 		
-		void setThreshold(float thresholdValue);
-		void setAutoThreshold(bool autoThreshold);
 		void setInvert(bool invert);
-        void setUseTargetColor(bool useTargetColor);
-		void setTargetColor(ofColor targetColor);
 		void setFindHoles(bool findHoles);
 		void setSortBySize(bool sortBySize);
 		
@@ -89,11 +87,7 @@ namespace ofxCv {
 
 	protected:
 		cv::Mat hsvBuffer, thresh;
-		bool autoThreshold, invert, simplify;
-		float thresholdValue;
-		
-		bool useTargetColor;
-		ofColor targetColor;
+		bool invert, simplify;
 		
 		float minArea, maxArea;
 		bool minAreaNorm, maxAreaNorm;

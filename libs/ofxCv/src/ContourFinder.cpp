@@ -22,11 +22,9 @@ namespace ofxCv {
 	using namespace cv;
 	
 	ContourFinder::ContourFinder()
-	:autoThreshold(true)
 	,invert(false)
 	,simplify(true)
 	,thresholdValue(128.)
-	,useTargetColor(false)
 	,contourFindingMode(CV_RETR_EXTERNAL)
 	,sortBySize(false) {
 		resetMinArea();
@@ -34,33 +32,6 @@ namespace ofxCv {
 	}
 	
 	vector<ofxCvBlob> ContourFinder::findContours(Mat img) {
-		// threshold the image using a tracked color or just binary grayscale
-		if(useTargetColor) {
-			Scalar offset(thresholdValue, thresholdValue, thresholdValue);
-			Scalar base = toCv(targetColor);
-			if(trackingColorMode == TRACK_COLOR_RGB) {
-				inRange(img, base - offset, base + offset, thresh);
-			} else {
-				if(TRACK_COLOR_H) {
-					offset[1] = 255;
-					offset[2] = 255;
-				}
-				if(TRACK_COLOR_HS) {
-					offset[2] = 255;
-				}
-				cvtColor(img, hsvBuffer, CV_RGB2HSV);
-				base = toCv(convertColor(targetColor, CV_RGB2HSV));
-				Scalar lowerb = base - offset;
-				Scalar upperb = base + offset;
-				inRange(hsvBuffer, lowerb, upperb, thresh);
-			}
-		} else {
-            copyGray(img, thresh);
-		}
-		if(autoThreshold) {
-			threshold(thresh, thresholdValue, invert);
-		}
-		
 		// run the contour finder
 		vector<vector<cv::Point> > allContours;
 		int simplifyMode = simplify ? CV_CHAIN_APPROX_SIMPLE : CV_CHAIN_APPROX_NONE;
@@ -105,6 +76,20 @@ namespace ofxCv {
 			contours.push_back(allContours[allIndices[i]]);
 			polylines.push_back(toOf(contours[i]));
 			boundingRects.push_back(boundingRect(contours[i]));
+			
+			ofxCvBlob blob;
+			
+            blob.area = toOf(contours[i]).getArea();
+            
+            float               length;
+            blob.boundingRect = toOf(boundingRect(contours[i])=;
+            ofPoint             centroid;
+            blob.hole = false;
+        
+			blob.pts = allContours[allIndices[i]];
+			blob.nPts = pts.size();
+			
+			blobs.push_back(blob);
 		}
 	}
 	
@@ -238,28 +223,11 @@ namespace ofxCv {
 		
 		return quad;
 	}
-	
-	void ContourFinder::setAutoThreshold(bool autoThreshold) {
-		this->autoThreshold = autoThreshold;
-	}
-	
-	void ContourFinder::setThreshold(float thresholdValue) {
-		this->thresholdValue = thresholdValue;
-	}
-	
+		
 	void ContourFinder::setInvert(bool invert) {
 		this->invert = invert;
 	}
     
-    void ContourFinder::setUseTargetColor(bool useTargetColor) {
-        this->useTargetColor = useTargetColor;
-    }
-	
-	void ContourFinder::setTargetColor(ofColor targetColor) {
-		useTargetColor = true;
-		this->targetColor = targetColor;
-	}
-	
 	void ContourFinder::setSimplify(bool simplify) {
 		this->simplify = simplify;
 	}
