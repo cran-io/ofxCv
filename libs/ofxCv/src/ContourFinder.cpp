@@ -33,7 +33,7 @@ namespace ofxCv {
 		resetMaxArea();
 	}
 	
-	void ContourFinder::findContours(Mat img) {
+	vector<ofxCvBlob> ContourFinder::findContours(Mat img) {
 		// threshold the image using a tracked color or just binary grayscale
 		if(useTargetColor) {
 			Scalar offset(thresholdValue, thresholdValue, thresholdValue);
@@ -106,9 +106,6 @@ namespace ofxCv {
 			polylines.push_back(toOf(contours[i]));
 			boundingRects.push_back(boundingRect(contours[i]));
 		}
-		
-		// track bounding boxes
-		tracker.track(boundingRects);
 	}
 	
 
@@ -242,18 +239,6 @@ namespace ofxCv {
 		return quad;
 	}
 	
-	cv::Vec2f ContourFinder::getVelocity(unsigned int i) const {
-		return tracker.getVelocity(i);
-	}
-	
-	unsigned int ContourFinder::getLabel(unsigned int i) const {
-		return tracker.getCurrentLabels()[i];
-	}
-	
-	RectTracker& ContourFinder::getTracker() {
-		return tracker;
-	}
-	
 	void ContourFinder::setAutoThreshold(bool autoThreshold) {
 		this->autoThreshold = autoThreshold;
 	}
@@ -270,10 +255,9 @@ namespace ofxCv {
         this->useTargetColor = useTargetColor;
     }
 	
-	void ContourFinder::setTargetColor(ofColor targetColor, TrackingColorMode trackingColorMode) {
+	void ContourFinder::setTargetColor(ofColor targetColor) {
 		useTargetColor = true;
 		this->targetColor = targetColor;
-		this->trackingColorMode = trackingColorMode;
 	}
 	
 	void ContourFinder::setSimplify(bool simplify) {
