@@ -57,7 +57,7 @@ namespace ofxCv {
 		void setDifferenceMode(DifferenceMode differenceMode);
 		void reset();
 	protected:
-		cv::Mat accumulator, background, foreground, foregroundGray;
+		cv::Mat accumulator, background, foreground;
 		double learningRate, learningTime;
 		unsigned int thresholdValue;
 		bool useLearningTime, needToReset, ignoreForeground;

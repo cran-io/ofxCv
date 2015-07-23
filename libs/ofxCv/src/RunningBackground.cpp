@@ -23,14 +23,14 @@ namespace ofxCv {
 			case BRIGHTER: cv::subtract(frame, background, foreground); break;
 			case DARKER: cv::subtract(background, frame, foreground); break;
 		}
-        ofxCv::copyGray(foreground, foregroundGray);
-		int thresholdMode = ignoreForeground ? cv::THRESH_BINARY_INV : cv::THRESH_BINARY;
-		cv::threshold(foregroundGray, thresholded, thresholdValue, 255, thresholdMode);
+
+		cv::inRange(foreground, cv::Scalar(thresholdValue, thresholdValue, thresholdValue), cv::Scalar(255, 255, 255), thresholded);
 
 		float curLearningRate = learningRate;
 		if(useLearningTime) {
 			curLearningRate = 1. - powf(1. - (thresholdValue / 255.), 1. / learningTime);
 		}
+
 		if(ignoreForeground) {
 			cv::accumulateWeighted(frame, accumulator, curLearningRate, thresholded);
 			cv::bitwise_not(thresholded, thresholded);
