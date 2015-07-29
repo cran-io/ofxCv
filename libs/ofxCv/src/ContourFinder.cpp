@@ -34,7 +34,7 @@ namespace ofxCv {
 		// run the contour finder
 		vector<vector<cv::Point> > allContours;
 		int simplifyMode = simplify ? CV_CHAIN_APPROX_SIMPLE : CV_CHAIN_APPROX_NONE;
-		cv::findContours(thresh, allContours, contourFindingMode, simplifyMode);
+		cv::findContours(img, allContours, contourFindingMode, simplifyMode);
 		
 		// filter the contours
 		bool needMinFilter = (minArea > 0);
@@ -71,6 +71,8 @@ namespace ofxCv {
 		contours.clear();
 		polylines.clear();
 		boundingRects.clear();
+		
+		blobs.clear();
 		for(size_t i = 0; i < allIndices.size(); i++) {
 			contours.push_back(allContours[allIndices[i]]);
 			polylines.push_back(toOf(contours[i]));

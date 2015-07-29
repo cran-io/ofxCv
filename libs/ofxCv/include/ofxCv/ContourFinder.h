@@ -86,7 +86,7 @@ namespace ofxCv {
 		void draw();
 
 	protected:
-		cv::Mat hsvBuffer, thresh;
+		cv::Mat hsvBuffer;
 		bool invert, simplify;
 		
 		float minArea, maxArea;
