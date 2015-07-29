@@ -22,16 +22,15 @@ namespace ofxCv {
 	using namespace cv;
 	
 	ContourFinder::ContourFinder()
-	,invert(false)
+	:invert(false)
 	,simplify(true)
-	,thresholdValue(128.)
 	,contourFindingMode(CV_RETR_EXTERNAL)
 	,sortBySize(false) {
 		resetMinArea();
 		resetMaxArea();
 	}
 	
-	vector<ofxCvBlob> ContourFinder::findContours(Mat img) {
+	void ContourFinder::findContours(Mat img) {
 		// run the contour finder
 		vector<vector<cv::Point> > allContours;
 		int simplifyMode = simplify ? CV_CHAIN_APPROX_SIMPLE : CV_CHAIN_APPROX_NONE;
@@ -80,14 +79,20 @@ namespace ofxCv {
 			ofxCvBlob blob;
 			
             blob.area = toOf(contours[i]).getArea();
+            blob.boundingRect = toOf(boundingRect(contours[i]));
+
+            Moments m = moments(contours[i]);
+            blob.centroid.set(m.m10 / m.m00, m.m01 / m.m00);
             
-            float               length;
-            blob.boundingRect = toOf(boundingRect(contours[i])=;
-            ofPoint             centroid;
             blob.hole = false;
-        
-			blob.pts = allContours[allIndices[i]];
-			blob.nPts = pts.size();
+            
+            for (vector<cv::Point>::iterator p_it = allContours[allIndices[i]].begin(); p_it != allContours[allIndices[i]].end(); ++p_it) {
+                ofVec3f new_pt = ofVec3f(p_it->x, p_it->y);
+                blob.pts.push_back(new_pt);
+            }
+			blob.nPts = blob.pts.size();
+			
+			blob.length = arcLength(contours[i], true);
 			
 			blobs.push_back(blob);
 		}
