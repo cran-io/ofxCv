@@ -31,10 +31,13 @@ namespace ofxCv {
 	}
 	
 	void ContourFinder::findContours(Mat img) {
+        // cv::findContours modifies the original image, so we work on a copy        
+        img.copyTo(srcCopy); // copyTo handles allocation (only if necessary)
+
 		// run the contour finder
 		vector<vector<cv::Point> > allContours;
 		int simplifyMode = simplify ? CV_CHAIN_APPROX_SIMPLE : CV_CHAIN_APPROX_NONE;
-		cv::findContours(img, allContours, contourFindingMode, simplifyMode);
+		cv::findContours(srcCopy, allContours, contourFindingMode, simplifyMode);
 		
 		// filter the contours
 		bool needMinFilter = (minArea > 0);
@@ -42,7 +45,7 @@ namespace ofxCv {
 		vector<size_t> allIndices;
 		vector<double> allAreas;
 		if(needMinFilter || needMaxFilter) {
-			double imgArea = img.rows * img.cols;
+			double imgArea = srcCopy.rows * srcCopy.cols;
 			double imgMinArea = minAreaNorm ? (minArea * imgArea) : minArea;
 			double imgMaxArea = maxAreaNorm ? (maxArea * imgArea) : maxArea;
 			for(size_t i = 0; i < allContours.size(); i++) {

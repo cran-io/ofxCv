@@ -87,6 +87,7 @@ namespace ofxCv {
 
 	protected:
 		cv::Mat hsvBuffer;
+		cv::Mat srcCopy;
 		bool invert, simplify;
 		
 		float minArea, maxArea;
