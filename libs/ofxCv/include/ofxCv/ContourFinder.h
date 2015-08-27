@@ -31,22 +31,24 @@
 #include "ofxCv/Utilities.h"
 #include "ofxCv/Tracker.h"
 
+#include "ofxCvBlob.h"
+
 namespace ofxCv {
-	
-	enum TrackingColorMode {TRACK_COLOR_RGB, TRACK_COLOR_HSV, TRACK_COLOR_H, TRACK_COLOR_HS};
-	
+    
 	class ContourFinder {
 	public:
 		ContourFinder();
 		
 		template <class T> 
 		void findContours(T& img) {
-			findContours(toCv(img));
+            findContours(toCv(img));
 		}
 		void findContours(cv::Mat img);
 		const vector<vector<cv::Point> >& getContours() const;
 		const vector<ofPolyline>& getPolylines() const;
 		const vector<cv::Rect>& getBoundingRects() const;
+		
+		vector<ofxCvBlob> blobs;
 		
 		unsigned int size() const;
 		vector<cv::Point>& getContour(unsigned int i);
@@ -65,16 +67,8 @@ namespace ofxCv {
 		cv::Point2f getMinEnclosingCircle(unsigned int i, float& radius) const;
 		cv::RotatedRect getFitEllipse(unsigned int i) const;
 		vector<cv::Point> getFitQuad(unsigned int i) const;
-		cv::Vec2f getVelocity(unsigned int i) const;
 		
-		RectTracker& getTracker();
-		unsigned int getLabel(unsigned int i) const;
-		
-		void setThreshold(float thresholdValue);
-		void setAutoThreshold(bool autoThreshold);
 		void setInvert(bool invert);
-        void setUseTargetColor(bool useTargetColor);
-		void setTargetColor(ofColor targetColor, TrackingColorMode trackingColorMode = TRACK_COLOR_RGB);
 		void setFindHoles(bool findHoles);
 		void setSortBySize(bool sortBySize);
 		
@@ -92,21 +86,16 @@ namespace ofxCv {
 		void draw();
 
 	protected:
-		cv::Mat hsvBuffer, thresh;
-		bool autoThreshold, invert, simplify;
-		float thresholdValue;
-		
-		bool useTargetColor;
-		TrackingColorMode trackingColorMode;
-		ofColor targetColor;
+		cv::Mat hsvBuffer;
+		cv::Mat srcCopy;
+		bool invert, simplify;
 		
 		float minArea, maxArea;
 		bool minAreaNorm, maxAreaNorm;
 		
 		vector<vector<cv::Point> > contours;
 		vector<ofPolyline> polylines;
-		
-		RectTracker tracker;
+		    
 		vector<cv::Rect> boundingRects;
 
 		int contourFindingMode;
