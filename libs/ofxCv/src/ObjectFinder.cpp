@@ -44,7 +44,7 @@ namespace ofxCv {
 																(findBiggestObject ? CASCADE_FIND_BIGGEST_OBJECT | CASCADE_DO_ROUGH_SEARCH : 0),
 																minSize,
 																maxSize);
-		for(int i = 0; i < objects.size(); i++) {
+		for(unsigned int i = 0; i < objects.size(); i++) {
 			cv::Rect& rect = objects[i];
 			rect.width /= rescale, rect.height /= rescale;
 			rect.x /= rescale, rect.y /= rescale;
@@ -72,7 +72,7 @@ namespace ofxCv {
 	void ObjectFinder::draw() const {
 		ofPushStyle();
 		ofNoFill();
-		for(int i = 0; i < size(); i++) {
+		for(unsigned int i = 0; i < size(); i++) {
 			ofRectangle object = getObject(i);
 			ofRect(object);
 			ofDrawBitmapStringHighlight(ofToString(getLabel(i)), object.x, object.y);
@@ -95,7 +95,7 @@ namespace ofxCv {
 			setMinSizeScale(.1);
 			setMaxSizeScale(1);
 			setCannyPruning(true);
-			setFindBiggestObject(false);			
+			setFindBiggestObject(false);
 		} else if(preset == ObjectFinder::Sensitive) {
 			setRescale(.5);
 			setMinNeighbors(1);
@@ -106,7 +106,7 @@ namespace ofxCv {
 			setFindBiggestObject(false);
 		}
 	}
-	
+
 	void ObjectFinder::setRescale(float rescale) {
 		this->rescale = rescale;
 	}
@@ -131,7 +131,7 @@ namespace ofxCv {
 	void ObjectFinder::setMaxSizeScale(float maxSizeScale) {
 		this->maxSizeScale = maxSizeScale;
 	}
-	
+
 	float ObjectFinder::getRescale() const {
 		return rescale;
 	}
