@@ -83,7 +83,7 @@ namespace ofxCv {
 			
 			ofxCvBlob blob;
 			
-            blob.area = toOf(contours[i]).getArea();
+            blob.area = std::abs(toOf(contours[i]).getArea()); // Depending on whether opencv considers a region a hole or not, the area might be negative (which we don't care about)
             blob.boundingRect = toOf(boundingRect(contours[i]));
 
             Moments m = moments(contours[i]);
