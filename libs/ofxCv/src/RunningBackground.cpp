@@ -24,7 +24,7 @@ namespace ofxCv {
 			case DARKER: cv::subtract(background, frame, foreground); break;
 		}
 
-		cv::inRange(foreground, cv::Scalar(thresholdValue, thresholdValue, thresholdValue), cv::Scalar(255, 255, 255), thresholded);
+		cv::inRange(foreground, cv::Scalar(0, 0, 0), cv::Scalar(thresholdValue, thresholdValue, thresholdValue), thresholded);
 
 		float curLearningRate = learningRate;
 		if(useLearningTime) {
@@ -33,9 +33,9 @@ namespace ofxCv {
 
 		if(ignoreForeground) {
 			cv::accumulateWeighted(frame, accumulator, curLearningRate, thresholded);
-			cv::bitwise_not(thresholded, thresholded);
 		} else {
 			cv::accumulateWeighted(frame, accumulator, curLearningRate);
+			cv::bitwise_not(thresholded, thresholded);
 		}
 	}
 	cv::Mat& RunningBackground::getBackground() {
